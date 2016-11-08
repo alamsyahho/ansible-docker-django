@@ -5,7 +5,7 @@ app_dir: /var/app/myapps
 app_name: myapps
 docker_api_version: 1.22
 tmp_dir: /var/tmp/myapps
-nginx_server_name: www.myapps.net
+nginx_server_name: www.myapps.com
 docker_nginx_version: stable
 
 sources:
