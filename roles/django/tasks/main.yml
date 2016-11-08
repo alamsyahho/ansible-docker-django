@@ -67,6 +67,7 @@
     api_version: "{{ docker_api_version }}"
     name: nginx
     image: nginx:{{ docker_nginx_version }}
+    recreate: true
     state: started
     ports:
       - "80:80"
