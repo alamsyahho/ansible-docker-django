@@ -42,7 +42,7 @@
   docker_image:
     api_version: "{{ docker_api_version }}"
     path: "{{ tmp_dir }}"
-    name: "{{ app_name }}:2.0.1"
+    name: "{{ app_name }}:{{ version }}"
     push: false
 
 - name: ensure nginx conf.d directory exists
@@ -59,7 +59,7 @@
   docker_container:
     api_version: "{{ docker_api_version }}"
     name: "{{ app_name }}"
-    image: "{{ app_name }}:2.0.1"
+    image: "{{ app_name }}:{{ version }}"
     state: started
 
 - name: run docker container for nginx
