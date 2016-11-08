@@ -1,0 +1,7 @@
+.directory
+.vagrant
+docker.retry
+start.sh
+uwsgi.ini
+Vagrantfile
+temp/

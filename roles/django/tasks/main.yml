@@ -1,0 +1,77 @@
+---
+- name: get local working dir
+  local_action: shell pwd
+  register: local_working_dir
+
+- name: get software version from git repository
+  local_action: shell git describe --abbrev=0 --tags --match "v*"|sed -r 's/^(p|v)//' warn=no
+  register: version
+
+- name: clean up {{ tmp_dir }} before deployment
+  file:
+    name: "{{ tmp_dir }}"
+    state: absent
+
+- name: ensure {{ tmp_dir }} exists
+  file:
+    name: "{{ tmp_dir }}"
+    state: directory
+
+- name: syncing web files to {{ build_dir }}
+  synchronize:
+    src:  "{{ local_working_dir.stdout }}/{{ item }}"
+    dest: "{{ tmp_dir }}"
+  with_items: "{{ sources }}"
+
+- name: create dockerfile template
+  template:
+    src: Dockerfile.j2
+    dest: "{{ tmp_dir }}/Dockerfile"
+
+- name: create uwsgi config file
+  template:
+    src: uwsgi.ini.j2
+    dest: "{{ tmp_dir }}/uwsgi.ini"
+
+- name: create docker start script
+  template:
+    src: start.sh.j2
+    dest: "{{ tmp_dir }}/start.sh"
+
+- name: build docker image for {{ app_name }}
+  docker_image:
+    api_version: "{{ docker_api_version }}"
+    path: "{{ tmp_dir }}"
+    name: "{{ app_name }}:2.0.1"
+    push: false
+
+- name: ensure nginx conf.d directory exists
+  file:
+    name: "/etc/nginx/conf.d"
+    state: directory
+
+- name: create nginx vhost config for {{ app_name }}
+  template:
+    src: nginx_vhost.conf.j2
+    dest: "/etc/nginx/conf.d/{{ app_name }}.conf"
+
+- name: run docker container for {{ app_name }}
+  docker_container:
+    api_version: "{{ docker_api_version }}"
+    name: "{{ app_name }}"
+    image: "{{ app_name }}:2.0.1"
+    state: started
+
+- name: run docker container for nginx
+  docker_container:
+    api_version: "{{ docker_api_version }}"
+    name: nginx
+    image: nginx:{{ docker_nginx_version }}
+    state: started
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - "{{ app_name }}:{{ app_name }}"
+    volumes:
+      - "/etc/nginx/conf.d/{{ app_name }}.conf:/etc/nginx/conf.d/{{ app_name }}.conf"
