@@ -1,13 +1,18 @@
 ---
 
 python_version: 2.7.12
+docker_api_version: 1.22
+
 app_dir: /var/app/myapps
 app_name: myapps
-docker_api_version: 1.22
 tmp_dir: /var/tmp/myapps
+
 nginx_server_name: www.myapps.com
+
+# Version of nginx docker to use. Please refer to https://hub.docker.com/r/library/nginx/tags/
 docker_nginx_version: stable
 
+# List of files and folder to sync to docker container
 sources:
   - myapps
   - manage.py

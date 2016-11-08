@@ -17,7 +17,7 @@
     name: "{{ tmp_dir }}"
     state: directory
 
-- name: syncing web files to {{ build_dir }}
+- name: syncing web files to {{ tmp_dir }}
   synchronize:
     src:  "{{ local_working_dir.stdout }}/{{ item }}"
     dest: "{{ tmp_dir }}"
