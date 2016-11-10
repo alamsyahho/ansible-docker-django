@@ -1,5 +1,6 @@
 ---
 - hosts: all
+
   vars:
     python_version: 2.7.12
     docker_api_version: 1.22
