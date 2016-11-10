@@ -3,6 +3,7 @@
 python_version: 2.7.12
 docker_api_version: 1.22
 
+software_repo: https://github.com/alamsyahho/sample-django-project.git
 app_dir: /var/app/myapps
 app_name: myapps
 tmp_dir: /var/tmp/myapps

@@ -3,10 +3,6 @@
   local_action: shell pwd
   register: local_working_dir
 
-- name: get software version from git repository
-  local_action: shell git describe --abbrev=0 --tags --match "v*"|sed -r 's/^(p|v)//' warn=no
-  register: version
-
 - name: clean up {{ tmp_dir }} before deployment
   file:
     name: "{{ tmp_dir }}"
@@ -17,11 +13,14 @@
     name: "{{ tmp_dir }}"
     state: directory
 
-- name: syncing web files to {{ tmp_dir }}
-  synchronize:
-    src:  "{{ local_working_dir.stdout }}/{{ item }}"
+- name: Checkout django repository to {{ tmp_dir }}
+  git:
+    repo: "{{ software_repo }}"
     dest: "{{ tmp_dir }}"
-  with_items: "{{ sources }}"
+
+- name: get software version from git repository
+  local_action: shell cd {{ tmp_dir }} && git describe --abbrev=0 --tags --match "v*"|sed -r 's/^(p|v)//' warn=no
+  register: version
 
 - name: create dockerfile template
   template:
