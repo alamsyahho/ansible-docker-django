@@ -1,5 +1,7 @@
 # Ansible Role: django
 
+[![Build Status](https://travis-ci.org/alamsyahho/ansible-docker-django.svg?branch=master)](https://travis-ci.org/alamsyahho/ansible-docker-django)
+
 Deploy python django apps inside a docker container. There are 2 docker container created by this ansible roles, which is nginx and another box for running the python uwsgi module
 
 ## Requirements
