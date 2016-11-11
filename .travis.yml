@@ -16,6 +16,10 @@ install:
   - pip install ansible
   - echo -e 'localhost  ansible_connection=local' > tests/inventory
   - echo -e '[defaults]\nroles_path = ../\nhostfile = ./tests/inventory' > ansible.cfg
+
+services:
+  - docker
+
 script:
   - ansible-playbook --syntax-check tests/test.yml
   - ansible-playbook --sudo -v --diff tests/test.yml
