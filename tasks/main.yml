@@ -4,40 +4,48 @@
 - name: get local working dir
   local_action: shell pwd
   register: local_working_dir
+  changed_when: false
 
 - name: clean up {{ tmp_dir }} before deployment
   file:
     name: "{{ tmp_dir }}"
     state: absent
+  changed_when: false
 
 - name: ensure {{ tmp_dir }} exists
   file:
     name: "{{ tmp_dir }}"
     state: directory
+  changed_when: false
 
 - name: Checkout django repository to {{ tmp_dir }}
   git:
     repo: "{{ software_repo }}"
     dest: "{{ tmp_dir }}"
+  changed_when: false
 
 - name: get software version from git repository
   local_action: shell cd {{ tmp_dir }} && git describe --abbrev=0 --tags --match "v*"|sed -r 's/^(p|v)//' warn=no
   register: version
+  changed_when: false
 
 - name: create dockerfile template
   template:
     src: Dockerfile.j2
     dest: "{{ tmp_dir }}/Dockerfile"
+  changed_when: false
 
 - name: create uwsgi config file
   template:
     src: uwsgi.ini.j2
     dest: "{{ tmp_dir }}/uwsgi.ini"
+  changed_when: false
 
 - name: create docker start script
   template:
     src: start.sh.j2
     dest: "{{ tmp_dir }}/start.sh"
+  changed_when: false
 
 - name: build docker image for {{ app_name }}
   docker_image:
@@ -77,3 +85,4 @@
       - "{{ app_name }}:{{ app_name }}"
     volumes:
       - "/etc/nginx/conf.d/{{ app_name }}.conf:/etc/nginx/conf.d/{{ app_name }}.conf"
+  changed_when: false
