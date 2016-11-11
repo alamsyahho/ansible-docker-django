@@ -14,4 +14,4 @@
       - requirements.txt
 
   roles:
-    - role_under_test
+    - ansible-docker-django
