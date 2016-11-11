@@ -1,6 +1,6 @@
 .directory
 .vagrant
-docker.retry
+*.retry
 start.sh
 uwsgi.ini
 Vagrantfile
