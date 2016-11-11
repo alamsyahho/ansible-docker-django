@@ -1,4 +1,6 @@
 ---
+- include: packages.yml
+
 - name: get local working dir
   local_action: shell pwd
   register: local_working_dir

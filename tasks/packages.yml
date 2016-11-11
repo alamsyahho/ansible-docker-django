@@ -1,0 +1,7 @@
+---
+- name: install ansible docker-py
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - docker-py
