@@ -14,7 +14,6 @@ before_install:
  - sudo apt-get install -qq python-apt python-pycurl
 install:
   - pip install ansible
-  - pip install docker-py
   - echo -e 'localhost  ansible_connection=local' > tests/inventory
   - echo -e '[defaults]\nroles_path = ../\nhostfile = ./tests/inventory' > ansible.cfg
 script:
